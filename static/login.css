@@ -1,0 +1,71 @@
+/* login.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #222; /* Dark background */
+    color: #fff; /* White text */
+    margin:0;
+    padding:0;
+  }
+  
+  .container {
+    margin: 0 auto; /* Center the container horizontally */
+    margin-top: -80px;
+    padding: 20px; /* Add some padding for spacing */
+  }
+  
+
+  .border {
+    border: 1px solid #333;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: #333;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .header {
+    text-align: center;
+  }
+  
+  .word {
+    font-size: 24px;
+    font-weight: bold;
+    color: #007bff; /* Blue header text */
+  }
+  
+  .textbox {
+    padding: 10px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    background-color: #222;
+    color: #fff;
+    width: 250px;
+  }
+  
+  .btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .bottom {
+    font-size: 14px;
+    text-align: center;
+    color: #aaa;
+  }
+
+.form-container{
+    margin-top:-50px;
+}
+
+.image {
+    width: 25vh; /* Adjust width as needed */
+    height: 25vh; /* Adjust height as needed */
+    border-radius: 50%; /* Make the image a circle */
+    border: 2px solid #fff; /* White border around the image */
+    object-fit: cover; /* Maintain aspect ratio and scale to fit */
+    padding: 5px;
+  }

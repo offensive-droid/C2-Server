@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>C2 Server</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #222222;
+      color: #fff;
+    }
+
+    h1 {
+      color: #007bff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #333;
+      color: #fff;
+    }
+
+    tr:nth-child(even) {
+      background-color: #222;
+    }
+
+    a {
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    .interactive-shell-button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>C2 Server</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Hostname</th>
+        <th>PID</th>
+        <th>Process Name</th>
+        <th>Architecture</th>
+        <th>Last Callback</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for agent in agents %}
+      <tr>
+        <td>{{ agent[0] }}</td>
+        <td>{{ agent[1] }}</td>
+        <td>{{ agent[2] }}</td>
+        <td>{{ agent[3] }}</td>
+        <td>{{ agent[4] }}</td>
+        <td>{{ agent[5] }}</td>
+       
+        <td>
+            <button class="interactive-shell-button">
+              <a href="/bot/{{ agent[0] }}">Interact</a>
+            </button>
+
+            <form action="/delete_agent/{{ agent[0] }}" method="post" style="display:inline;"> 
+                <button class="interactive-shell-button" type="submit">Delete</button> 
+            </form>
+          </td>
+
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>
