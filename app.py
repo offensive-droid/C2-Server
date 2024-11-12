@@ -8,11 +8,6 @@ app.config['SECRET_KEY'] = '1234'  # Replace with a strong, random secret key
 app.config['SQLALCHEMY_DATABASE_URI']='postgresql://postgres:admin@localhost/postgres'
 
 # Database configuration (replace with your credentials)
-DB_NAME = "postgres"
-DB_USER = "postgres"
-DB_PASSWORD = "postgres"
-DB_HOST = "localhost"
-DB_PORT = "5432"
 
 
 def connect_to_db():
