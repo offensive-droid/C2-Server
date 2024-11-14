@@ -197,6 +197,7 @@ def index():
     else:
         return redirect(url_for('login'))  # Redirect to login if not logged in
 
+
 @app.route('/bot/<int:bot_id>', methods=['GET', 'POST'])
 def bot(bot_id):
     conn = connect_to_db()
@@ -209,7 +210,10 @@ def bot(bot_id):
 
     cur.execute("SELECT result FROM agents WHERE id = %s", (bot_id,))
     encoded_data = cur.fetchone()
-    
+
+    decoded_bytes = base64.b64decode(encoded_data[0])
+
+    decoded_data = ""
     if encoded_data[0] != None:
         # Decode the string
         decoded_bytes = base64.b64decode(encoded_data[0])
@@ -217,7 +221,6 @@ def bot(bot_id):
         # Convert the decoded bytes to a string
         decoded_data = decoded_bytes.decode('utf-8')
         
-
     if not bot_data:
         return f"No bot found with ID {bot_id}", 404
 
@@ -267,4 +270,4 @@ def logout():
 
 if __name__ == '__main__':
     init_db()
-    app.run(host='192.168.1.101', port=5000, debug=True)
+    app.run(host='192.168.1.102', port=5000, debug=True)

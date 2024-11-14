@@ -1,9 +1,10 @@
-$url = "http://192.168.1.101:5000"
+$url = "192.168.1.102:5000"
+
 
 function Get-ODBCData{  
     param(
           [string]$query,
-          [string]$dbServer = "127.0.0.1",   # DB Server (either IP or hostname)
+          [string]$dbServer = "localhost",   # DB Server (either IP or hostname)
           [string]$dbName   = "postgres", # Name of the database
           [string]$dbUser   = "postgres",    # User we'll use to connect to the database/server
           [string]$dbPass   = "postgres"     # Password for the $dbUser
