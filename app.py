@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, session, send_from_directory, jsonify
 from psycopg2.extras import RealDictCursor
 from dotenv import load_dotenv
-import psycopg2,hashlib,os,base64
+import psycopg2,hashlib,os,base64,secrets
+
 
 # Load environment variables from .env file
 load_dotenv()
@@ -13,8 +14,8 @@ DB_HOST = os.getenv("DB_HOST")
 DB_PORT = os.getenv("DB_PORT")
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '1234'  # Replace with a strong, random secret key
-app.config['SQLALCHEMY_DATABASE_URI']='postgresql://postgres:admin@localhost/postgres'
+app.config['SECRET_KEY'] = secrets.token_hex(32)  # random secret token
+app.config['SQLALCHEMY_DATABASE_URI']=f'postgresql://postgres:{DB_USER}@{DB_HOST}/postgres'
 
 # Database configuration (replace with your credentials)
 
@@ -40,7 +41,7 @@ def init_db():
         return None
 
     cursor = conn.cursor() 
-    cursor.execute('''CREATE TABLE IF NOT EXISTS agents ( id SERIAL PRIMARY KEY, hostname TEXT NOT NULL, pid INTEGER, process_name TEXT, architecture TEXT, last_callback TIMESTAMP, command TEXT, result TEXT)''') 
+    cursor.execute('''CREATE TABLE IF NOT EXISTS agents ( id SERIAL PRIMARY KEY, hostname TEXT UNIQUE NOT NULL, pid INTEGER, process_name TEXT, architecture TEXT, last_callback TIMESTAMP, command TEXT, result TEXT)''') 
     conn.commit() 
     cursor.close() 
     conn.close()
@@ -85,83 +86,6 @@ def delete_agent(agent_id):
         print("Error:", e)
         return jsonify({"error": "Failed to delete agent"}), 500
 
-
-
-
-@app.route('/send_command', methods=['POST'])
-def send_command():
-    conn = connect_to_db()
-    if conn is None:
-        return None
-    
-    data = request.json
-    hostname = data.get('hostname', '')
-    command = data.get('command', '')
-
-    cursor = conn.cursor() 
-    cursor.execute("UPDATE agents SET command = %s WHERE hostname = %s", (command, hostname))
-    conn.commit()
-    cursor.close()
-    conn.close()
-    
-    return "Command sent successfully!", 200
-
-def fetch_command():
-    data = request.json
-    hostname = data.get('hostname', '')
-
-    conn = connect_to_db()
-    if conn is None:
-        return None
-    cursor = conn.cursor()
-    cursor.execute("SELECT command FROM agents WHERE hostname = %s", (hostname,))
-    row = cursor.fetchone()
-    cursor.execute("UPDATE agents SET last_callback = now() WHERE hostname = %s", (hostname,))
-    conn.commit()
-    cursor.close()
-    conn.close()
-
-    if row:
-        return jsonify({'command': row['command']}), 200
-    return "No command found", 404
-
-
-
-@app.route('/send_result', methods=['POST'])
-def send_result():
-    conn = connect_to_db()
-    if conn is None:
-            return None
-    
-    data = request.json
-    hostname = data.get('hostname', '')
-    encoded_result = data.get('result', '')
-
-    if encoded_result:
-        decoded_bytes = base64.b64decode(encoded_result)
-        decoded_result = decoded_bytes.decode('utf-8')
-        
-        cursor = conn.cursor()
-        cursor.execute("UPDATE agents SET result = %s, last_callback = now() WHERE hostname = %s", (decoded_result, hostname))
-        conn.commit()
-        cursor.close()
-        conn.close()
-        
-        return "Result received and saved successfully!", 200
-    return "No result received", 400
-
-
-@app.route('/get_results', methods=['GET'])
-def get_results():
-    conn = connect_to_db()
-    if conn is None:
-        return None
-    cursor = conn.cursor(cursor_factory=RealDictCursor)
-    cursor.execute("SELECT id, pid, process_name, architecture, last_callback FROM agents")
-    rows = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    return jsonify(rows), 200
 
 
 def authenticate_user(username, password):
@@ -270,4 +194,4 @@ def logout():
 
 if __name__ == '__main__':
     init_db()
-    app.run(host='192.168.1.102', port=5000, debug=True)
+    app.run(host='192.168.1.101', port=5000, debug=True)
