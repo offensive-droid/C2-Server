@@ -11,9 +11,6 @@ EXTERNAL_DB_URL = os.getenv("EXTERNAL_DB_URL")
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = secrets.token_hex(32)  # random secret token
-app.config['SQLALCHEMY_DATABASE_URI']=f'postgresql://postgres:{DB_USER}@{DB_HOST}'
-# Database configuration (replace with your credentials)
-
 
 def connect_to_db():
     try:
