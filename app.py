@@ -15,7 +15,7 @@ DB_PORT = os.getenv("DB_PORT")
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = secrets.token_hex(32)  # random secret token
-app.config['SQLALCHEMY_DATABASE_URI']=f'postgresql://postgres:{DB_USER}@{DB_HOST}/postgres'
+app.config['SQLALCHEMY_DATABASE_URI']=f'postgresql://postgres:{DB_USER}@{DB_HOST}'
 
 # Database configuration (replace with your credentials)
 
