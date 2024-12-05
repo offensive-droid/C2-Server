@@ -23,9 +23,9 @@ def connect_to_db():
     try:
       conn = psycopg2.connect(EXTERNAL_DB_URL)
       return conn
-except (Exception, psycopg2.Error) as error:
-  print("Error while connecting to PostgreSQL", error)
-  return None
+    except (Exception, psycopg2.Error) as error:
+        print("Error while connecting to PostgreSQL", error)
+      return None
 
 # Initialize database for agents
 def init_db(): 
