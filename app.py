@@ -16,23 +16,16 @@ DB_PORT = os.getenv("DB_PORT")
 app = Flask(__name__)
 app.config['SECRET_KEY'] = secrets.token_hex(32)  # random secret token
 app.config['SQLALCHEMY_DATABASE_URI']=f'postgresql://postgres:{DB_USER}@{DB_HOST}'
-
 # Database configuration (replace with your credentials)
 
 
 def connect_to_db():
     try:
-        conn = psycopg2.connect(
-            database=DB_NAME,
-            user=DB_USER,
-            password=DB_PASSWORD,
-            host=DB_HOST,
-            port=DB_PORT
-        )
-        return conn
-    except (Exception, psycopg2.Error) as error:
-        print("Error while connecting to PostgreSQL", error)
-        return None
+      conn = psycopg2.connect(EXTERNAL_DB_URL)
+      return conn
+except (Exception, psycopg2.Error) as error:
+  print("Error while connecting to PostgreSQL", error)
+  return None
 
 # Initialize database for agents
 def init_db(): 
