@@ -12,6 +12,7 @@ DB_USER = os.getenv("DB_USER")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_HOST = os.getenv("DB_HOST")
 DB_PORT = os.getenv("DB_PORT")
+EXTERNAL_DB_URL = os.getenv("EXTERNAL_DB_URL")
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = secrets.token_hex(32)  # random secret token
