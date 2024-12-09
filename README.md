@@ -4,4 +4,4 @@
 
 # Unresolved Issues
 
-There is still a bug that which is infinite execution of the command sent from the C2 server.
+There is still a bug that which is the infinite execution of the command sent from the C2 server.
